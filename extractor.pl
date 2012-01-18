@@ -1317,7 +1317,7 @@ sub Process_TCP_Sessions {
    #debug
    print "\n Process_TCP_Sessions subroutine called \n" unless $Arg{quiet};
 
-   my ($randomid,$rawdir,$dirname,$filename,$id_text,$id_html,$rawboth,$time,$raw,$uri);
+   my ($randomid,$rawdir,$dirname,$filename,$id_text,$id_html,$rawboth,$time,$raw,$uri,$thisfile,$directories);
    my @Time;
    my @chars = ( "A" .. "Z", "a" .. "z", 0 .. 9 );
 
@@ -1581,7 +1581,7 @@ sub Process_TCP_Sessions {
 		&Process_HTTP($session_id);
 		$uri = URI->new($httpaddress);
 		$fpath = $uri->path;
-		($filename, $directories) = fileparse($fpath);
+		($thisfile, $directories) = fileparse($fpath);
 	}
 
 	if ($Arg{Save_As_X11_Playback}{$service}) {
@@ -1609,7 +1609,7 @@ sub Process_TCP_Sessions {
     if ($Arg{output_csv}) {
         ### Build output line
 		#transport_protocol; apps_prot; src_ipaddr; src_port; dst_ipaddr; dst_port; uri; directory; filename; network_prot;
-        $outtext = "tcp; $service_name; $ip_src; $tcp_src_port; $ip_dest; $tcp_dest_port; $uri; $dirname; $filename; ;\n"; 
+        $outtext = "tcp; $service_name; $ip_src; $tcp_src_port; $ip_dest; $tcp_dest_port; $uri; $dirname; $thisfile; ;\n"; 
 
         ### Write info file
         open (FILECSV,">>output.csv") || die "ERROR59: opening output.csv $!\n";

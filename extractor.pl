@@ -1524,7 +1524,7 @@ sub Process_TCP_Sessions {
 	
 	#
 	# 5. --- Save Session as HTML ---
-	#
+	# it's saving a html file containing data from a session
 	if ($Arg{Save_As_TCP_HTML}{$service} || $Arg{output_allhtml}) { 
 		&Save_Both_HTML("TCP",$session_id,$number,$service_name,
 		 $id_html); 
@@ -2872,17 +2872,18 @@ sub Create_Log_Files {
 
 	#BDG some memory debug
 	#system("pmap -x $$");
+	if ($Arg{output_httplog}) {
+		#
+		#  Create HTTPlog.text
+		#
+		open(FILE,">httplog.text") || die "ERROR29: creating HTTP log: $!\n";
 
-	#
-	#  Create HTTPlog.text
-	#
-	open(FILE,">httplog.text") || die "ERROR29: creating HTTP log: $!\n";
+		foreach $time (sort { $a <=> $b }(keys (%{$HTTPlog{time}}))) {
+			print FILE $HTTPlog{time}{$time};
+		}
 
-	foreach $time (sort { $a <=> $b }(keys (%{$HTTPlog{time}}))) {
-		print FILE $HTTPlog{time}{$time};
+		close FILE;
 	}
-
-	close FILE;
 }
 
 
@@ -6348,6 +6349,7 @@ sub Process_Command_Line_Arguments {
 	$Arg{output_ICMP} = 1;
 	$Arg{output_info} = 0;
 	$Arg{output_hex} = 0;
+	$Arg{output_httplog} = 0;
 	$Arg{output_index} = 0;
 	$Arg{keydata} = 0;
 	$Arg{debug} = 0;
